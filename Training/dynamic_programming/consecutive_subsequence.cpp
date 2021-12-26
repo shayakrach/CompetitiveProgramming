@@ -1,0 +1,85 @@
+#include <bits/stdc++.h>
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <vector>
+#include <set>
+#include <cmath>
+#include <cstdio>
+ 
+using namespace std;
+ 
+typedef long long LL;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<LL> vl;
+typedef pair<int, int> pi;
+ 
+#define SIZE(v) (int)v.size()
+#define SORT(v) sort(all(v))
+#define loop(i,s,e) for(int i=s;i<e;++i)
+#define rloop(i,s,e) for(int i=s;i>=e;--i)
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define foreach(a, b) for (auto&(a) : (b))
+#define MAX(a, b) a = max(a, b)
+#define MIN(a, b) a = min(a, b)
+#define MODULO 1000000007
+/*
+void solve(vi &vec, int i, int num){
+    while(num>0){
+        MIN(vec[i], vec[i-num%10] + 1);
+        num = num/10;
+    }
+}
+*/
+ 
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+ 
+    int n;
+    cin >> n;
+    
+    //vector<pi> vect;
+    
+    vi v;
+    int N = 0;
+    
+    loop(i,0,n)
+    {
+        int num;
+        cin>>num;
+        v.push_back(num);
+        MAX(N, num);
+    }
+    
+    int max_len = 0;
+    vvi dp(N+1, vi(2, 0));
+    
+    
+    loop(i, 0, n)
+    {
+       if(v[i] == 1)
+       {
+            dp[v[i]][0] = 1;
+            dp[v[i]][1] = 1;
+       }
+       else if(v[i] == 2) 
+       {
+           dp[v[i]][0] = 1 + dp[1][0];
+           dp[v[i]][1] = 1 + dp[1][1];
+           
+       }
+       else
+       {
+           dp[v[i]][0] = 1 + dp[v[i]-1][0];
+           dp[v[i]][1] = max(1 + dp[v[i]-1][1], 2 + dp[v[i]-2][0]);
+       }
+       
+       max_len = max({dp[v[i]][0] + 1, dp[v[i]][1], max_len});
+    }
+ 
+    cout << max_len;
+    return 0;
+}
